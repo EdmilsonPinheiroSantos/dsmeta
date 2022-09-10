@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { sale } from "../../models/sale";
+import { BASE_URL } from "../../utils/request";
 import NotificationButton from '../NotificationButton';
 import './styles.css';
 
@@ -13,10 +15,12 @@ function SalesCard() {
     const [minDate, setMinDate] = useState(min);
     const [maxDate, setMaxDate] = useState(max);
 
+    const [sales, setsales] = useState<sale[]>([]);
+
     useEffect(() => {
-        axios.get("http://127.0.0.1:5173/sales")
+        axios.get(`${BASE_URL}/sale`)
         .then(response => {
-            console.log(response.data);
+            setsales(response.data.content);
 
         });
 
@@ -52,87 +56,24 @@ function SalesCard() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className="show992">37</td><td className="show576">26/02/2022</td><td>Anakin</td><td className="show992">82</td><td className="show992">82</td><td>22465.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td className="show992">53</td><td className="show576">26/02/2022</td><td>Anakin</td><td className="show992">82</td><td className="show992">82</td><td>22465.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">12</td><td className="show576">26/02/2022</td><td>Anakin</td><td className="show992">82</td><td className="show992">82</td><td>22465.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">35</td><td className="show576">26/02/2022</td><td>Anakin</td><td className="show992">82</td><td className="show992">82</td><td>22465.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">44</td><td className="show576">26/02/2022</td><td>Anakin</td><td className="show992">82</td><td className="show992">82</td><td>22465.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">37</td><td className="show576">26/02/2022</td><td>Anakin</td><td className="show992">82</td><td className="show992">82</td><td>22465.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">37</td><td className="show576">26/02/2022</td><td>Anakin</td><td className="show992">82</td><td className="show992">82</td><td>22465.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">37</td><td className="show576">26/02/2022</td><td>Anakin</td><td className="show992">82</td><td className="show992">82</td><td>22465.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">37</td><td className="show576">26/02/2022</td><td>Anakin</td><td className="show992">82</td><td className="show992">82</td><td>22465.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">37</td><td className="show576">26/02/2022</td><td>Anakin</td><td className="show992">82</td><td className="show992">82</td><td>22465.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
+                        {sales.map(sale => {
+                            return (
+                                <tr key={sale.id}>
+                                    <td className="show992">{sale.id}</td>
+                                    <td className="show576">{new Date(sale.date).toLocaleDateString()}</td>
+                                    <td>{sale.sellerName}</td>
+                                    <td className="show992">{sale.visited}</td>
+                                    <td className="show992">{sale.deals}</td>
+                                    <td>R$ {sale.amount.toFixed(2)}</td>
+                                <td>
+                                    <div className="dsmeta-red-btn-container">
+                                        <NotificationButton />
+                                    </div>
+                                </td>
+    
+                            </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
             </div>
